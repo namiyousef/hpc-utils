@@ -3,7 +3,7 @@ get_gpu_modules () {
   module load compilers/gnu/4.9.2
   module load python/3.7.4
   module load cuda/10.1.243/gnu-4.9.2
-  module load cudnn/7.5.0.56/cuda-10.1}
+  module load cudnn/7.5.0.56/cuda-10.1
 }
 
 install_torch_gpu () {
