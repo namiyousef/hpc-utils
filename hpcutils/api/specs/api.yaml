@@ -14,12 +14,42 @@ paths:
         200:
           description: 'Checks to see if API is alive'
 
+  /create/{cluster}:
+    post:
+      tags:
+        - create
+      operationId: hpcutils.api.views.create_cluster_config
+      parameters:
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        200:
+          description: 'successfully created cluster config'
+
+  /run/gpu/{cluster}:
+    post:
+      tags:
+        - run
+      operationId: hpcutils.api.views.run_gpu_job
+      parameters:
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+        - $ref: '#/components/parameters/Walltime'
+        - $ref: '#/components/parameters/StorageMem'
+        - $ref: '#/components/parameters/ScriptTemplateName'
+        - $ref: '#/components/parameters/EnvVars'
+        - $ref: '#/components/parameters/JobName'
+      summary: Submit myriad job
+      responses:
+        200:
+          description: 'successfully submitted job'
   /gpu/myriad:
     post:
       tags:
         - submit
       operationId: hpcutils.api.views.gpu_myriad
       parameters:
+        - $ref: '#/components/parameters/ProjectName'
         - $ref: '#/components/parameters/Walltime'
         - $ref: '#/components/parameters/StorageMem'
         - $ref: '#/components/parameters/ScriptTemplateName'
@@ -31,8 +61,23 @@ paths:
           description: 'successfully submitted job'
 
 
+
 components:
   parameters:
+    ProjectName:
+      name: project_name
+      in: path
+      required: true
+      description: name of project
+      schema:
+        $ref: '#/components/schemas/ProjectName'
+    Cluster:
+      name: cluster
+      in: path
+      required: true
+      description: name of cluster
+      schema:
+        $ref: '#/components/schemas/Cluster'
     Walltime:
       name: walltime
       in: query
@@ -72,6 +117,12 @@ components:
         $ref: '#/components/schemas/ScriptTemplateName'
 
   schemas:
+    Cluster:
+      type: string
+      enum: ["myriad", "beaker"]
+    ProjectName:
+      type: string
+
     Walltime:
       type: string
       example: "6:00:00"
