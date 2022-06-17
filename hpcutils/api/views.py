@@ -56,13 +56,11 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
     venv_path = os.path.join(job_path, 'venv')
     try:
         helper_path = os.path.join(HELPERS_PATH, f'{cluster}.sh')
-        helper_path = os.path.join(HELPERS_PATH, f'{cluster}.sh')
-        process = subprocess.Popen([f'source {helper_path}', f'prepare_virtualenv {venv_path} {github_username} {github_repository}'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        print(stdout)
-        print(stderr)
-    except subprocess.CalledProcessError as e:
-        return f"Failed to source {helper_path}. Full logs: {e.output}", 400
+        os.system(
+            f'source {helper_path}; prepare_virtualenv {venv_path} {github_username} {github_repository}'
+        )
+    except Exception as e:
+        return f"Failed to source {helper_path} or to install virtualenv. Full logs: {e}", 400
 
     myriad_template_path = os.path.join(TEMPLATES_PATH, f'{cluster}.sh')
     job_script_template_path = os.path.join(SCRIPTS_PATH, script_template_name)
