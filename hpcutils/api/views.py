@@ -56,7 +56,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
     venv_path = os.path.join(job_path, 'venv')
     try:
         helper_path = os.path.join(HELPERS_PATH, f'{cluster}.sh')
-        output = subprocess.check_output([f'source {helper_path};', f'prepare_virtualenv {venv_path} {github_username} {github_repository}'], shell=True)
+        output = subprocess.check_output(f'source {helper_path}; prepare_virtualenv {venv_path} {github_username} {github_repository}', shell=True)
     except subprocess.CalledProcessError as e:
         return f"Failed to source {helper_path}. Full logs: {e.output}", 400
 
