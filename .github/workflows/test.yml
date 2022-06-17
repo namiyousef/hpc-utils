@@ -8,5 +8,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: script
       run: |
+        sudo apt-get update -y
+        sudo apt-get install -y shunit2
         shunit2
       shell: bash
