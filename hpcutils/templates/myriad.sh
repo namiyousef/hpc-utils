@@ -26,9 +26,10 @@
 # Replace "<your_UCL_id>" with your UCL user ID.
 #$ -wd /home/ucabyn0/Scratch
 
+export JOB_PATH={project_name}/{job_name}
 # COPY NECESSARY FILES
-cp -r {script_template_name} $TMPDIR/{script_template_name}
-cp -r venv $TMPDIR/venv
+cp -r $JOB_PATH/{script_template_name} $TMPDIR/{script_template_name}
+cp -r $JOB_PATH/venv $TMPDIR/venv
 
 cd $TMPDIR
 
@@ -45,4 +46,4 @@ source venv/bin/activate
 source {script_template_name}
 run_job_script
 
-tar -zcvf $HOME/Scratch/{script_template_name}_$JOB_ID.tar.gz $TMPDIR
+tar -zcvf $HOME/Scratch/$JOB_PATH/job_output/{script_template_name}_$JOB_ID.tar.gz $TMPDIR
