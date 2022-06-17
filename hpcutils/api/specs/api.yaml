@@ -49,22 +49,6 @@ paths:
       responses:
         200:
           description: 'successfully submitted job'
-  /gpu/myriad:
-    post:
-      tags:
-        - submit
-      operationId: hpcutils.api.views.gpu_myriad
-      parameters:
-        - $ref: '#/components/parameters/ProjectName'
-        - $ref: '#/components/parameters/Walltime'
-        - $ref: '#/components/parameters/StorageMem'
-        - $ref: '#/components/parameters/ScriptTemplateName'
-        - $ref: '#/components/parameters/EnvVars'
-      summary: Submit myriad job
-      responses:
-        200:
-          description: 'successfully submitted job'
-
 
 
 components:
