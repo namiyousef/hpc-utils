@@ -1,0 +1,12 @@
+name: run-script
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: script
+      run: |
+        shunit2
+      shell: bash
