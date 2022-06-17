@@ -23,3 +23,13 @@ prepare_virtualenv () {
   install_torch_gpu $1
   install_library_ssh $2 $3
 }
+# := will save the variable globally
+# :- will not save the variable, but you can specify using local
+
+generate_script_file () {
+  local var="${job:=testing}" # NOTE this actually declares the variable outside scope of function, may not be ideal
+  echo $var
+}
+
+
+echo "Successfully loaded Myriad Helpers"
