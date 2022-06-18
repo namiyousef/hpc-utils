@@ -37,7 +37,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
     if not os.path.exists(project_path):
         return f"Can't find project {project_name}. Create it using the /create endpoint first", 400
 
-    job_path = os.path.join(project_path, job_name)
+    job_path = os.path.join(project_path, 'tmp_job_dir')
     job_output_path = os.path.join(job_path, 'job_output')
 
     if not os.path.exists(job_path):
@@ -65,12 +65,12 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
 
     job_script_path = os.path.join(job_path, 'job_script.sh')
-    if not os.path.exists(job_script_path):
-        try:
-            with open(job_script_path, 'w') as f:
-                f.write(myriad_script)
-        except Exception as e:
-            return f'Failed to write {job_script_path}. Full logs: {e}', 400
+    # LOGIC: re-write any temporary files
+    try:
+        with open(job_script_path, 'w') as f:
+            f.write(myriad_script)
+    except Exception as e:
+        return f'Failed to write {job_script_path}. Full logs: {e}', 400
 
     # build job script
     try:
@@ -87,14 +87,14 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         return f"Failed to read {job_script_template_path}. Full logs: {e}", 400
 
     job_script_function_path = os.path.join(job_path, script_template_name)
-    if not os.path.exists(job_script_function_path):
-        try:
-            with open(job_script_function_path, 'w') as f:
-                f.write(job_script_function)
-        except Exception as e:
-            return f"Failed to write {job_script_function_path}. Full logs: {e}", 400
+    try:
+        with open(job_script_function_path, 'w') as f:
+            f.write(job_script_function)
+    except Exception as e:
+        return f"Failed to write {job_script_function_path}. Full logs: {e}", 400
 
 
+    # TODO needs very good testing this point onwards...
     try:
         output = subprocess.check_output([f'qsub {job_script_path}'], shell=True) # TODO not recommended
     except Exception as e:
@@ -109,23 +109,18 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         job_date=timestamp.strftime("%m/%d/%Y, %H:%M:%S"),
         script_template_name=script_template_name,
         env_vars=env_vars,
-        job_metadata=body
+        job_metadata=body,
+        job_id=job_id
     )
 
     job_map_path = os.path.join(job_path, 'metadata.json')
-    if os.path.exists(job_map_path):
-        logging.info('Reading job metadata')
-        with open(job_map_path, 'r') as f:
-            metadata_history = json.load(f)
-    else:
-        metadata_history = {}
 
     logging.info('Updating job metadata')
     with open(job_map_path, 'w') as f:
-        metadata_history[job_id] = metadata_dict
-        json.dump(metadata_history, f)
+        json.dump(metadata_dict, f)
+
+    job_dir = os.path.join(project_path, job_id)
+    os.rename(job_path, job_dir)
 
 
-    # TODO need to save some metadata for the get endpoints, e.g. checking the version of the venv
-
-    return 'Successfully submitted job', 200
+    return f'Successfully submitted job {job_id}', 200
