@@ -48,4 +48,4 @@ run_job_script
 rm -r venv
 rm {script_template_name}
 
-tar -zcvf $HOME/Scratch/$JOB_PATH/job_output/{script_template_name}_$JOB_ID.tar.gz $TMPDIR
+tar -zcvf $HOME/Scratch/$JOB_PATH/job_output/$JOB_ID.tar.gz $TMPDIR
