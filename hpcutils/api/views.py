@@ -8,6 +8,23 @@ import logging
 def health_check():
     return 'OK'
 
+def get_resource_metadata(cluster, project_name, job_id):
+    cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
+    resource_path = os.path.join(cluster_storage_dir, 'job_metadata', project_name)
+    if job_id:
+        resource_path = os.path.join(resource_path, job_id)
+
+    if not os.path.exists(resource_path):
+        return f"Resource at: {resource_path} does not exist", 400
+
+    metadata_path = os.path.join(resource_path, 'metadata.json')
+    with open(metadata_path, 'r') as f:
+        metadata = json.load(f)
+
+    return metadata, 200
+
+
+
 # TODO per project, has only a single repo attached
 def create_cluster_config(cluster, project_name, github_username, github_repository):
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']

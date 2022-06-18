@@ -14,7 +14,20 @@ paths:
         200:
           description: 'Checks to see if API is alive'
 
-  /create/{cluster}:
+  /get/{cluster}/{project_name}/metadata:
+    get:
+      tags:
+        - metadata
+      operationId: hpcutils.api.views.get_resource_metadata
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        200:
+          description: 'successfully got project data'
+
+  /create/{cluster}/{project_name}:
     post:
       tags:
         - create
@@ -31,7 +44,7 @@ paths:
         #- $ref: '#/components/parameters/Walltime'
 
         #- $ref: '#/components/parameters/StorageMem'
-  /run/gpu/{cluster}:
+  /run/gpu/{cluster}/{project_name}:
     post:
       tags:
         - run
@@ -53,6 +66,13 @@ paths:
 
 components:
   parameters:
+    JobId:
+      name: job_id
+      in: query
+      required: false
+      description: id of job
+      schema:
+        $ref: '#/components/schemas/JobId'
     JobName:
       name: job_name
       in: query
@@ -76,7 +96,7 @@ components:
         $ref: '#/components/schemas/GithubRepository'
     ProjectName:
       name: project_name
-      in: query
+      in: path
       required: true
       description: name of project
       schema:
@@ -127,6 +147,9 @@ components:
           schema:
             $ref: '#/components/schemas/JobVars'
   schemas:
+    JobId:
+      type: string
+      default: ""
     GithubUsername:
       type: string
       example: namiyousef
