@@ -26,10 +26,11 @@
 # Replace "<your_UCL_id>" with your UCL user ID.
 #$ -wd /home/ucabyn0/Scratch
 
-export JOB_PATH={project_name}/{job_name}
+export PROJECT_PATH={project_name}
+export JOB_PATH={project_name}/$PROJECT_PATH
 # COPY NECESSARY FILES
 cp -r $JOB_PATH/{script_template_name} $TMPDIR/{script_template_name}
-cp -r $JOB_PATH/venv $TMPDIR/venv
+cp -r $PROJECT_PATH/venv $TMPDIR/venv
 
 cd $TMPDIR
 

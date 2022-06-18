@@ -2,6 +2,7 @@ from hpcutils.config import SCRIPTS_PATH, TEMPLATES_PATH, CLUSTER_RESOURCE_MAPPI
 import os
 import json
 import subprocess
+import datetime
 
 def health_check():
     return 'OK'
@@ -36,31 +37,15 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         return f"Can't find project {project_name}. Create it using the /create endpoint first", 400
 
     job_path = os.path.join(project_path, job_name)
-    if os.path.exists(job_path):
-        return f"Job {job_name} already exists", 400
-
-    os.mkdir(job_path)
     job_output_path = os.path.join(job_path, 'job_output')
-    os.mkdir(job_output_path)
 
-    metadata_path = os.path.join(project_path, 'metadata.json')
-    try:
-        with open(metadata_path, 'r') as f:
-            metadata = json.load(f)
-
-        github_username = metadata['github_username']
-        github_repository = metadata['github_repository']
-    except Exception as e:
-        return f'Failed to retrieve GitHub username and password. Metadata.json not configured properly or does not exist', 400
+    if not os.path.exists(job_path):
+        os.mkdir(job_path)
+        os.mkdir(job_output_path)
 
     venv_path = os.path.join(job_path, 'venv')
-    try:
-        helper_path = os.path.join(HELPERS_PATH, f'{cluster}.sh')
-        os.system(
-            f'source {helper_path}; prepare_virtualenv {venv_path} {github_username} {github_repository}'
-        )
-    except Exception as e:
-        return f"Failed to source {helper_path} or to install virtualenv. Full logs: {e}", 400
+    if not os.path.exists(venv_path):
+        return 'venv does not exist', 400
 
     myriad_template_path = os.path.join(TEMPLATES_PATH, f'{cluster}.sh')
     job_script_template_path = os.path.join(SCRIPTS_PATH, script_template_name)
@@ -79,11 +64,12 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
 
     job_script_path = os.path.join(job_path, 'job_script.sh')
-    try:
-        with open(job_script_path, 'w') as f:
-            f.write(myriad_script)
-    except Exception as e:
-        return f'Failed to write {job_script_path}. Full logs: {e}', 400
+    if not os.path.exists(job_script_path):
+        try:
+            with open(job_script_path, 'w') as f:
+                f.write(myriad_script)
+        except Exception as e:
+            return f'Failed to write {job_script_path}. Full logs: {e}', 400
 
     # build job script
     try:
@@ -100,15 +86,41 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         return f"Failed to read {job_script_template_path}. Full logs: {e}", 400
 
     job_script_function_path = os.path.join(job_path, script_template_name)
-    try:
-        with open(job_script_function_path, 'w') as f:
-            f.write(job_script_function)
-    except Exception as e:
-        return f"Failed to write {job_script_function_path}. Full logs: {e}", 400
+    if not os.path.exists(job_script_function_path):
+        try:
+            with open(job_script_function_path, 'w') as f:
+                f.write(job_script_function)
+        except Exception as e:
+            return f"Failed to write {job_script_function_path}. Full logs: {e}", 400
 
 
     try:
         output = subprocess.check_output([f'qsub {job_script_path}'])
     except Exception as e:
         return f"Failed to submit job. Full logs: {e}", 400
+
+    split_output = output.split()
+    job_id = split_output[2]
+
+    metadata_dict = dict(
+        job_date=datetime.datetime.now(),
+        script_template_name=script_template_name,
+        env_vars=env_vars,
+        job_metadata=body
+    )
+    job_map_path = os.path.join(job_path, 'metadata.json')
+    if os.path.exists(job_map_path):
+        with open(job_map_path, 'r') as f:
+            metadata_history = json.load(f)
+    else:
+        metadata_history = {}
+
+
+    with open(job_map_path, 'w') as f:
+        metadata_history[job_id] = metadata_dict
+        json.dump(metadata_history, f)
+
+
+    # TODO need to save some metadata for the get endpoints, e.g. checking the version of the venv
+
     return 'Successfully submitted job', 200
