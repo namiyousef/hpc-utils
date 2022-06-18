@@ -27,7 +27,7 @@
 #$ -wd /home/ucabyn0/Scratch
 
 export PROJECT_PATH=job_metadata/{project_name}
-export JOB_PATH=$PROJECT_PATH/{job_name}
+export JOB_PATH=$PROJECT_PATH/tmp_job_dir
 # COPY NECESSARY FILES
 cp -r $JOB_PATH/{script_template_name} $TMPDIR/{script_template_name}
 cp -r $PROJECT_PATH/venv $TMPDIR/venv
