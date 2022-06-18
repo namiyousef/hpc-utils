@@ -19,3 +19,5 @@ CLUSTER_RESOURCE_MAPPING = {
         },
     }
 }
+
+PORT = os.environ.get('PORT', 8080)
