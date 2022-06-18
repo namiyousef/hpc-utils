@@ -28,7 +28,7 @@ setup(
     ],
     #package_data={}
     packages=find_packages(exclude=('tests*', 'experiments*')),
-    package_data={'': ['api/specs/api.yaml', 'helpers/', 'scripts/', 'templates/']},
+    package_data={'': ['api/specs/api.yaml', 'helpers/*.sh', 'scripts/*sh', 'templates/*sh']},
     include_package_data=True,
     license='MIT',
     entry_points={
