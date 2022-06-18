@@ -114,9 +114,9 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
     job_map_path = os.path.join(job_path, 'metadata.json')
     if os.path.exists(job_map_path):
+        logging.info('Reading job metadata')
         with open(job_map_path, 'r') as f:
             metadata_history = json.load(f)
-        logging.info('Reading job metadata')
     else:
         metadata_history = {}
 
