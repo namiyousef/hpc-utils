@@ -95,7 +95,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
 
     try:
-        output = subprocess.check_output([f'qsub {job_script_path}'])
+        output = subprocess.check_output([f'qsub {job_script_path}'], shell=True) # TODO not recommended at all...
     except Exception as e:
         return f"Failed to submit job. Full logs: {e}", 400
 
