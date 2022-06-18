@@ -27,6 +27,18 @@ paths:
         200:
           description: 'successfully got project data'
 
+  /get/{cluster}/{project_name}/all:
+    get:
+      tags:
+        - metadata
+      operationId: hpcutils.api.views.get_project_jobs
+      parameters:
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        200:
+          description: 'successfully got all jobs'
+
   /create/{cluster}/{project_name}:
     post:
       tags:

@@ -23,6 +23,27 @@ def get_resource_metadata(cluster, project_name, job_id):
 
     return metadata, 200
 
+def get_project_jobs(cluster, project_name):
+    cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
+    project_name = os.path.join(cluster_storage_dir, 'job_metadata', project_name)
+    if not os.path.exists(project_name):
+        return f"Project at: {project_name} does not exist", 400
+
+    metadata = {}
+    for job_id in os.listdir(project_name):
+        job_dir = os.path.join(project_name, job_id)
+        if os.path.isdir(job_dir):
+            metadata_path = os.path.join(job_dir, 'metadata.json')
+            if os.path.exists(metadata_path):
+                with open(metadata_path, 'r') as f:
+                    metadata[job_id] = json.load(f)
+            else:
+                logging.error(f'Path {job_id} does not have a metadata.json file')
+        else:
+            logging.info(f'Path {job_id} is not a directory')
+
+    return metadata, 200
+
 
 
 # TODO per project, has only a single repo attached
