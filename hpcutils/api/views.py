@@ -101,9 +101,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         return f"Failed to submit job. Full logs: {e}", 400
 
     split_output = output.split()
-    job_id = split_output[2]
-    print(split_output)
-    print(job_id)
+    job_id = split_output[2].decode('utf-8')
 
     timestamp = datetime.datetime.now()
     metadata_dict = dict(
