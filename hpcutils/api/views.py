@@ -43,7 +43,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         os.mkdir(job_path)
         os.mkdir(job_output_path)
 
-    venv_path = os.path.join(job_path, 'venv')
+    venv_path = os.path.join(project_path, 'venv')
     if not os.path.exists(venv_path):
         return 'venv does not exist', 400
 
