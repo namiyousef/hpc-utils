@@ -9,9 +9,6 @@
 # - gpus
 #$ -l gpu=1
 
-# - request A100 GPU node
-# #$ -ac allow=L
-
 # - Request RAM (must be an integer followed by M, G, or T)
 #$ -l mem=32G
 
@@ -46,5 +43,9 @@ source venv/bin/activate
 
 source {script_template_name}
 run_job_script
+
+# DELETE FILES COPIED FROM JOB
+rm -r venv
+rm {script_template_name}
 
 tar -zcvf $HOME/Scratch/$JOB_PATH/job_output/{script_template_name}_$JOB_ID.tar.gz $TMPDIR
