@@ -97,12 +97,12 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
     try:
         output = subprocess.check_output([f'qsub {job_script_path}'], shell=True) # TODO not recommended
-        print(output)
     except Exception as e:
         return f"Failed to submit job. Full logs: {e}", 400
 
+    output = output.decode('utf-8')
     split_output = output.split()
-    job_id = split_output[2].decode('utf-8')
+    job_id = split_output[2]
 
     timestamp = datetime.datetime.now()
     metadata_dict = dict(
