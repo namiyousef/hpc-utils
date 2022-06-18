@@ -28,10 +28,10 @@ setup(
     ],
     #package_data={}
     packages=find_packages(exclude=('tests*', 'experiments*')),
-    package_data={'': ['api/specs/api.yaml']},
+    package_data={'': ['api/specs/api.yaml', 'helpers/', 'scripts/', 'templates/']},
     include_package_data=True,
     license='MIT',
     entry_points={
-        'console_scripts': ['hpcutils-api=hpcutils.run_api:main'],
+        'console_scripts': ['hpcutils-api=hpcutils.run_api:main', 'hpcutils-worker=hpcutils.run_worker'],
     }
 )
