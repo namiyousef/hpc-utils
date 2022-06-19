@@ -166,6 +166,8 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
 
 def delete_job(cluster, project_name, job_id):
+    # TODO danger with delete: you might delete something that does not have the files downloaded yet!
+    # TODO need to know if job complete, can probably use the qstat command!
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
     job_metadata_path = os.path.join(cluster_storage_dir, f'job_metadata/{project_name}/{job_id}')
     job_output_dir = os.path.join(job_metadata_path, 'job_output')
@@ -191,3 +193,14 @@ def delete_job(cluster, project_name, job_id):
         shutil.rmtree(job_metadata_path)
 
     return f"Successfully deleted items associated with job: {job_id}", 200
+
+
+def get_logs(cluster, project_name, job_id, log_type):
+    cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
+    log_path = os.path.join(cluster_storage_dir, f'job_metadata/{project_name}/{job_id}/job_output/{log_type}.txt')
+    if not os.path.exists(log_path):
+        return "Log does not exist", 400
+    else:
+        with open(log_path, 'r') as f:
+            log_text = f.read()
+        return log_text, 200

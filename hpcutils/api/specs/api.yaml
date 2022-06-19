@@ -27,6 +27,20 @@ paths:
         200:
           description: 'successfully got project data'
 
+  /get/{cluster}/{project_name}/logs:
+    get:
+      tags:
+        - logs
+      operationId: hpcutils.api.views.get_logs
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+        - $ref: '#/components/parameters/LogType'
+      responses:
+        200:
+          description: 'successfully got logs'
+
   /get/{cluster}/{project_name}/metadata:
     get:
       tags:
@@ -93,6 +107,13 @@ paths:
 
 components:
   parameters:
+    LogType:
+      name: log_type
+      in: query
+      required: true
+      description: type of log to get
+      schema:
+        $ref: '#/components/schemas/LogType'
     JobId:
       name: job_id
       in: query
@@ -174,6 +195,9 @@ components:
           schema:
             $ref: '#/components/schemas/JobVars'
   schemas:
+    LogType:
+      type: string
+      enum: ["output", "error"]
     JobId:
       type: string
       default: ""
