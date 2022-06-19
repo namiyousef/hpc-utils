@@ -100,6 +100,7 @@ class CompleteJobProcessor:
         # delete the metadata.json
         os.rmdir(os.path.join(self.project_path, 'tmpdir/job'))
         os.rmdir(os.path.join(self.project_path, 'tmpdir'))
+        os.remove(os.path.join(self.project_path, f'{self.job_id}.json'))
 
         # cleans up the file
         return self
