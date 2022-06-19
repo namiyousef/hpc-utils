@@ -54,4 +54,6 @@ rm -r venv
 rm $SCRIPT_TEMPLATE_NAME
 
 # TODO where to add job_completion_metadata???
-tar -zcvf $HOME/Scratch/$JOB_PATH/job_output/$PROJECT_NAME.$JOB_ID.tar.gz $TMPDIR
+# TODO this is more a design thing, should not be specific to myriad (the path)
+#tar -zcvf $HOME/Scratch/$JOB_PATH/job_output/$PROJECT_NAME.$JOB_ID.tar.gz $TMPDIR
+tar -zcvf $HOME/Scratch/$PROJECT_NAME.$JOB_ID.tar.gz $TMPDIR
