@@ -130,3 +130,9 @@ dmypy.json
 
 # IDE related
 .idea/
+
+# venv
+venv*
+
+# experiment related
+Scratch/
