@@ -14,6 +14,19 @@ paths:
         200:
           description: 'Checks to see if API is alive'
 
+  /delete/{cluster}/{project_name}/job:
+    delete:
+      tags:
+        - delete
+      operationId: hpcutils.api.views.delete_job
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        200:
+          description: 'successfully got project data'
+
   /get/{cluster}/{project_name}/metadata:
     get:
       tags:
@@ -38,6 +51,8 @@ paths:
       responses:
         200:
           description: 'successfully got all jobs'
+
+      # TODO add feature for sleecting A100, V100 gpus
 
   /create/{cluster}/{project_name}:
     post:

@@ -4,6 +4,7 @@ import json
 import subprocess
 import datetime
 import logging
+import shutil
 
 def health_check():
     return 'OK'
@@ -162,3 +163,31 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
 
 
     return f'Successfully submitted job {job_id}', 200
+
+
+def delete_job(cluster, project_name, job_id):
+    cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
+    job_metadata_path = os.path.join(cluster_storage_dir, f'job_metadata/{project_name}/{job_id}')
+    job_output_dir = os.path.join(job_metadata_path, 'job_output')
+    scratch_files = os.listdir(cluster_storage_dir)
+
+    if any(job_id in scratch_file for scratch_file in scratch_files if scratch_file.endswith('.tar.gz') or scratch_file.endswith('.tar')):
+        return f"There exists at least one job output .tar or .tar.gz file associated with job {job_id}. Deleting blocked so as not to lose any data", 400
+
+
+    if any(os.scandir(job_output_dir)):
+        return f"Job output directory is not empty for job {job_id}. Deleting blocked so as not to lose any data", 400
+
+    # remove any files in scratch
+    for scratch_file in scratch_files:
+        if job_id in scratch_file:
+            if scratch_file.endswith(f'.o{job_id}') or scratch_file.endswith(f'.e{job_id}'):
+                scratch_file_path = os.path.join(cluster_storage_dir, scratch_file)
+                os.remove(scratch_file_path)
+
+
+    # remove any directory associated with the project\
+    if os.path.exists(job_metadata_path):
+        shutil.rmtree(job_metadata_path)
+
+    return f"Successfully deleted items associated with job: {job_id}", 200
