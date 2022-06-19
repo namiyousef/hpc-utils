@@ -172,6 +172,17 @@ def delete_job(cluster, project_name, job_id):
     job_metadata_path = os.path.join(cluster_storage_dir, f'job_metadata/{project_name}/{job_id}')
     job_output_dir = os.path.join(job_metadata_path, 'job_output')
     scratch_files = os.listdir(cluster_storage_dir)
+    output_scratch_file = [scratch_file for scratch_file in scratch_files if scratch_file.endswith(f'.o{job_id}')]
+    if output_scratch_file:
+        output_scratch_file = output_scratch_file[0]
+        output_scratch_file_path = os.path.join(cluster_storage_dir, output_scratch_file)
+        if os.path.exists(output_scratch_file_path):
+            with open(output_scratch_file_path, 'r') as f:
+                scratch_file_text = f.read()
+                print(scratch_file_text)
+            if not scratch_file_text:
+                return f'Output scratch file: {output_scratch_file_path} is empty, job may not be complete yet. Deleting blocked so as not to lose any data', 400
+
 
     if any(job_id in scratch_file for scratch_file in scratch_files if scratch_file.endswith('.tar.gz') or scratch_file.endswith('.tar')):
         return f"There exists at least one job output .tar or .tar.gz file associated with job {job_id}. Deleting blocked so as not to lose any data", 400
@@ -179,6 +190,7 @@ def delete_job(cluster, project_name, job_id):
 
     if any(os.scandir(job_output_dir)):
         return f"Job output directory is not empty for job {job_id}. Deleting blocked so as not to lose any data", 400
+
 
     # remove any files in scratch
     for scratch_file in scratch_files:
