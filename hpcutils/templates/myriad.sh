@@ -9,6 +9,9 @@
 # - gpus
 #$ -l gpu=1
 
+# - request V100 only
+#$ -ac allow=EF
+
 # - Request RAM (must be an integer followed by M, G, or T)
 #$ -l mem=32G
 
