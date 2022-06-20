@@ -2,6 +2,7 @@ import os
 import tarfile
 import json
 
+# TODO see if you can add logging here!
 class CompleteJobProcessor:
     # can you generalise this for non-myriad jobs? ATM only for myriad!!!!
     def __init__(self, message_data):
@@ -43,11 +44,10 @@ class CompleteJobProcessor:
         tar_path = os.path.join(self.project_path, self.filename)
 
 
-
         if not self.metadata['unzipped']:
             try:
                 tar = tarfile.open(tar_path, 'r:gz')
-                tar.extractall()
+                tar.extractall(self.project_path)
                 tar.close()
                 self.metadata['unzipped'] = True
                 with open(self.metadata_path, 'w') as f:
@@ -58,7 +58,7 @@ class CompleteJobProcessor:
 
         # TODO might not have the same file structure!!! (e.g if in beaker)
         job_output_src = os.path.join(
-            self.project_path, f'tmpdir/job/{self.project_name}.{self.job_id}.undefined'
+            self.project_path, f'tmpdir/job/{self.job_id}.undefined'
         )
         # TODO how to know if job successful? has to be from errors no?
 
