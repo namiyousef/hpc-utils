@@ -38,6 +38,8 @@ class MyriadJobCompletionEventWorker:
         # logging?
 
 
+        # TODO think about how to do files that maybe have not finished completing just yet (e.g.in terms of copying)
+
     def get_message(self):
         if not self.message or self.message['message_acknowledged']:
             for item in os.listdir(self.directory_to_monitor):
@@ -56,8 +58,8 @@ class MyriadJobCompletionEventWorker:
 
                     split_message = item.split('.')
                     print(split_message)
-                    if len(split_message) == 4 and split_message[1].isdigit() and split_message[2] == 'gz' and \
-                            split_message[3] == 'tar':
+                    if len(split_message) == 4 and split_message[1].isdigit() and split_message[2] == 'tar' and \
+                            split_message[3] == 'gz':
                         message['data']['processor'] = 'complete_job_processor'
                         message['data']['project_path'] = os.path.join(self.directory_to_monitor)
 
