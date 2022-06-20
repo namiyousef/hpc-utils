@@ -32,6 +32,6 @@ setup(
     include_package_data=True,
     license='MIT',
     entry_points={
-        'console_scripts': ['hpcutils-api=hpcutils.run_api:main', 'hpcutils-worker=hpcutils.run_worker'],
+        'console_scripts': ['hpcutils-api=hpcutils.run_api:main', 'hpcutils-worker=hpcutils.run_worker:main'],
     }
 )
