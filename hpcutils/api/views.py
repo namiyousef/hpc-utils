@@ -216,3 +216,11 @@ def get_logs(cluster, project_name, job_id, log_type):
         with open(log_path, 'r') as f:
             log_text = f.read()
         return log_text, 200
+
+
+def create_venv(cluster, project_name):
+    return 'Not implemented yet', 400
+
+
+def delete_venv(cluster, project_name):
+    return 'Not implemented yet', 400
