@@ -85,6 +85,32 @@ paths:
         #- $ref: '#/components/parameters/Walltime'
 
         #- $ref: '#/components/parameters/StorageMem'
+
+        # TODO update the get methods to enable basic filtering of results
+  /create/{cluster}/{project_name}/venv:
+    post:
+      tags:
+        - create
+      operationId: hpcutils.api.views.create_venv
+      parameters:
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        200:
+          description: 'successfully created venv'
+
+  /delete/{cluster}/{project}/venv:
+    delete:
+      tags:
+        - delete
+      operationId: hpcutils.api.views.delete_venv
+      parameters:
+        - $ref: '#/components/parameters/Cluster'
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        200:
+          description: 'successfully deleted venv'
+
   /run/gpu/{cluster}/{project_name}:
     post:
       tags:
