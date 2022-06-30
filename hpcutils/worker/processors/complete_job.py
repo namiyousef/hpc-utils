@@ -46,6 +46,9 @@ class CompleteJobProcessor:
 
         if not self.metadata['unzipped']:
             try:
+                # TODO extract all does not delete the tar file, consider adding a process for caching item (e.g. in .cache)
+                # TODO also: need to think about the concept of a message queue, right now method is not ideal...
+                
                 tar = tarfile.open(tar_path, 'r:gz')
                 tar.extractall(self.project_path)
                 tar.close()
@@ -62,6 +65,9 @@ class CompleteJobProcessor:
         )
         # TODO how to know if job successful? has to be from errors no?
 
+        # TODO need to also think about caching data (defining a storage for it)
+        # TODO this needs thinking: at the moment if the job has already been ingested but the files not deleted
+        # then it would cause issues (e.g. if worker failed). it would keep failing at this stage. ALso needs to implement caching
         job_output_dest = os.path.join(self.project_path, f'job_metadata/{self.project_name}/{self.job_id}/job_output')
         if not self.metadata['moved_to_dest']:
             try:
