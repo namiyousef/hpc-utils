@@ -1,9 +1,10 @@
 from hpcutils.worker.processors.complete_job import CompleteJobProcessor
+from hpcutils.worker.utils import _is_job_error_file, _is_job_output_data, _is_job_output_file
 import logging
 import os
 import datetime
 import time
-
+import re
 import logging
 
 # create logger
@@ -56,13 +57,23 @@ class MyriadJobCompletionEventWorker:
                         'message_acknowledged': False
                     }
 
-                    split_message = item.split('.')
-                    print(split_message)
-                    if len(split_message) == 4 and split_message[1].isdigit() and split_message[2] == 'tar' and \
-                            split_message[3] == 'gz':
-                        message['data']['processor'] = 'complete_job_processor'
-                        message['data']['project_path'] = os.path.join(self.directory_to_monitor)
+                    if _is_job_output_data(item):
+                        split_message = item.split('.')
+                        if len(split_message) == 4 and split_message[1].isdigit():
+                            message['data']['processor'] = 'complete_job_processor'
+                            message['data']['project_path'] = os.path.join(self.directory_to_monitor)
 
+                    if _is_job_output_file(item) or _is_job_error_file(item):
+                        # add time threshold to delete!
+                        pass
+
+                    if bool(re.search(r"^(\d+)(\.json)$", item)):
+                        # then it's a json output file that we've created!
+                        message['data']['processor'] = 'delete_job_processor'
+
+# TODO a) your design is not a worker becaseu you can't run mulriple of them. The key is you need to find a way to emulate the 'messaging' of a worker
+# TODO b) you need a way to cleanup the old files fromt he old jobs (things you o longer need)
+# TODO c) you need to figure out a way to update metadata about the jobs, and to determine when jobs are completed
                     self.message = message
                     logger.info(f'Received message: {self.message}')
                     return self.message
@@ -78,8 +89,11 @@ class Worker(MyriadJobCompletionEventWorker):
         'complete_job_processor': CompleteJobProcessor
     }
 
-    def __init__(self):
+    def __init__(self, cluster):
+        if not cluster:
+            raise Exception('Please ensure that you have specified the cluster environment by setting the CLUSTER environment variable.')
         super().__init__()
+
 
     def get_processors(self):
         message = self.get_message()
@@ -117,3 +131,7 @@ class Worker(MyriadJobCompletionEventWorker):
 
 
             time.sleep(2)
+
+
+# problems with worker: does not move the extraction files
+#

@@ -63,7 +63,6 @@ class CompleteJobProcessor:
         job_output_src = os.path.join(
             self.project_path, f'tmpdir/job/{self.job_id}.undefined'
         )
-        # TODO how to know if job successful? has to be from errors no?
 
         # TODO need to also think about caching data (defining a storage for it)
         # TODO this needs thinking: at the moment if the job has already been ingested but the files not deleted
@@ -101,7 +100,6 @@ class CompleteJobProcessor:
         return self
 
     def postprocess(self):
-
         # send an email
         # delete the metadata.json
         os.rmdir(os.path.join(self.project_path, 'tmpdir/job'))
