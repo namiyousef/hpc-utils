@@ -13,11 +13,14 @@ CLUSTER_RESOURCE_MAPPING = {
         'venv': {
             'gpu': {
                 'torch': {
-
                 }
-            }
+            },
         },
+        'output_file_pattern': r"(?<!^)(\.o\d+)$",
+        'error_file_pattern': r"(?<!^)(\.e\d+)$",
+        'data_file_pattern': r"(?<!^)(\.gz\.tar)$"
     }
 }
 
 PORT = os.environ.get('PORT', 8080)
+CLUSTER = os.environ.get('CLUSTER', None)

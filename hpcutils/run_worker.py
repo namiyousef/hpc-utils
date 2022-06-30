@@ -1,6 +1,7 @@
 from hpcutils.worker.worker import Worker
+from hpcutils.config import CLUSTER
 def main():
-    Worker().run()
+    Worker(CLUSTER).run()
 
 if __name__ == '__main__':
-    Worker().run()
+    Worker(CLUSTER).run()
