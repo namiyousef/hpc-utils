@@ -68,6 +68,9 @@ def create_cluster_config(cluster, project_name, github_username, github_reposit
                 github_username=github_username,
                 github_repository=github_repository
             ), f)
+        data_path = os.path.join(project_path, 'data')
+        os.mkdir(data_path)
+
         return f"Project {project_name} created.", 200
 
 def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env_vars):
