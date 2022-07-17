@@ -33,6 +33,7 @@ export SCRIPT_TEMPLATE_NAME={script_template_name}
 # COPY NECESSARY FILES
 cp -r $JOB_PATH/$SCRIPT_TEMPLATE_NAME $TMPDIR/$SCRIPT_TEMPLATE_NAME
 cp -r $PROJECT_PATH/venv $TMPDIR/venv
+cp -r $PROJECT_PATH/data $TMPDIR/data
 
 cd $TMPDIR
 
@@ -52,6 +53,7 @@ run_job_script
 # DELETE FILES COPIED FROM JOB
 rm -r venv
 rm $SCRIPT_TEMPLATE_NAME
+rm -r data
 
 # TODO where to add job_completion_metadata???
 # TODO this is more a design thing, should not be specific to myriad (the path)
