@@ -16,12 +16,13 @@ install_torch_gpu () {
 }
 
 install_library_ssh () {
-  pip install --no-cache-dir git+ssh://git@github.com/$1/$2.git
+  pip install --no-cache-dir git+ssh://git@github.com/$1/$2.git@$3
 }
 
 prepare_virtualenv () {
   install_torch_gpu $1
-  install_library_ssh $2 $3
+  pip install -U pip
+  install_library_ssh $2 $3 $4
 }
 # := will save the variable globally
 # :- will not save the variable, but you can specify using local
