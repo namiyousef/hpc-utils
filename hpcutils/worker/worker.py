@@ -56,8 +56,9 @@ class MyriadJobCompletionEventWorker:
                         },
                         'message_acknowledged': False
                     }
-
+                    print(item)
                     if _is_job_output_data(item):
+                        print('true')
                         split_message = item.split('.')
                         if len(split_message) == 4 and split_message[1].isdigit():
                             message['data']['processor'] = 'complete_job_processor'
