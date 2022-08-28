@@ -74,7 +74,7 @@ def create_cluster_config(cluster, project_name, github_username, github_reposit
         return f"Project {project_name} created.", 200
 
 def run_gpu_job(body, cluster, project_name, job_name, script_template_name, environment_variables):
-
+    environment_variables = body.pop('environment_variables')
     print(body)
     print(environment_variables)
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
@@ -121,7 +121,6 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
     try:
         with open(job_script_template_path, 'r') as f:
             job_script = f.read()
-            print(job_script)
             job_script = job_script.format(
                 **environment_variables
             )
