@@ -74,6 +74,7 @@ def create_cluster_config(cluster, project_name, github_username, github_reposit
         return f"Project {project_name} created.", 200
 
 def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env_vars):
+    print(env_vars)
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
     project_path = os.path.join(cluster_storage_dir, 'job_metadata', project_name)
     if not os.path.exists(project_path):
