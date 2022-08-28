@@ -260,7 +260,7 @@ components:
       type: string
     EnvVars:
       type: object
-      example: {"env_vars": {"EPOCHS": 5, "BATCH_SIZE": 64, "MODEL_NAME": "xlm-roberta-base", "MAX_LENGTH": 128, "VERBOSE": 2, "DATASET": "paws-x", "TRAINING_METHOD": "monolingual", "LANGS": "en de es fr ja ko zh", "SEED":0, "LEARNING_RATE": "2e-5", "SHUFFLE": 0, "IDS_FILE_NAME": "data/none.pkl"}}
+      example: {"environment_variables": {"EPOCHS": 5, "BATCH_SIZE": 64, "MODEL_NAME": "xlm-roberta-base", "MAX_LENGTH": 128, "VERBOSE": 2, "DATASET": "paws-x", "TRAINING_METHOD": "monolingual", "LANGS": "en de es fr ja ko zh", "SEED":0, "LEARNING_RATE": "2e-5", "SHUFFLE": 0, "IDS_FILE_NAME": "data/none.pkl"}}
     ScriptTemplateName:
       type: string
       example: div_examples.sh
