@@ -198,10 +198,10 @@ components:
         $ref: '#/components/schemas/StorageMem'
 
     EnvVars:
-      name: env_vars
+      name: environment_variables
       in: query
       required: true
-      description: environment variables
+      description: environment variables go here
       schema:
         $ref: '#/components/schemas/EnvVars'
 

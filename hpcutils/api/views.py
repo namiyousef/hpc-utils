@@ -7,7 +7,7 @@ import logging
 import shutil
 
 def health_check():
-    return 'OK'
+    return 'OK. We are running the new version'
 
 def get_resource_metadata(cluster, project_name, job_id):
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
@@ -73,8 +73,7 @@ def create_cluster_config(cluster, project_name, github_username, github_reposit
 
         return f"Project {project_name} created.", 200
 
-def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env_vars):
-    print(env_vars)
+def run_gpu_job(body, cluster, project_name, job_name, script_template_name, environment_variables):
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
     project_path = os.path.join(cluster_storage_dir, 'job_metadata', project_name)
     if not os.path.exists(project_path):
@@ -120,7 +119,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         with open(job_script_template_path, 'r') as f:
             job_script = f.read()
             job_script = job_script.format(
-                **env_vars
+                **environment_variables
             )
 
             job_script_function = f'run_job_script () {{' \
@@ -151,7 +150,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
     metadata_dict = dict(
         job_date=timestamp.strftime("%m/%d/%Y, %H:%M:%S"),
         script_template_name=script_template_name,
-        env_vars=env_vars,
+        env_vars=environment_variables,
         job_metadata=body,
         job_id=job_id
     )
