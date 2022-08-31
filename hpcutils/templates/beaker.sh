@@ -31,7 +31,7 @@ export PROJECT_PATH=job_metadata/$PROJECT_NAME
 export JOB_PATH=$PROJECT_PATH/$JOB_ID
 export METADATA_PATH=$JOB_PATH/metadata.json
 
-hpcutils-email "start" "Job ${JOB_ID} started" $METADATA_PATH
+hpcutils-email "start" $JOB_ID $EMAIL_RECIPIENTS $METADATA_PATH
 
 export SCRIPT_TEMPLATE_NAME={script_template_name}
 # COPY NECESSARY FILES
@@ -56,7 +56,7 @@ rm -r venv
 rm $SCRIPT_TEMPLATE_NAME
 rm -r data
 
-hpcutils-email "end" "Job ${JOB_ID} complete"
+hpcutils-email "end" $JOB_ID $EMAIL_RECIPIENTS
 
 
 tar -zcvf $HOME/Scratch/$PROJECT_NAME.$JOB_ID.tar.gz $TMPDIR
