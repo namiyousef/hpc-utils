@@ -36,6 +36,7 @@ export SCRIPT_TEMPLATE_NAME={script_template_name}
 cp -r $JOB_PATH/$SCRIPT_TEMPLATE_NAME $TMPDIR/$SCRIPT_TEMPLATE_NAME
 cp -r $PROJECT_PATH/venv $TMPDIR/venv
 cp -r $PROJECT_PATH/data $TMPDIR/data
+cp -r $METADATA_PATH $TMPDIR/metadata.json
 
 cd $TMPDIR
 
@@ -45,7 +46,7 @@ module load cuda/10.1
 
 source venv/bin/activate
 
-hpcutils-email "start" $JOB_ID $EMAIL_RECIPIENTS $METADATA_PATH
+hpcutils-email "start" $JOB_ID $EMAIL_RECIPIENTS metadata.json
 
 source $SCRIPT_TEMPLATE_NAME
 
