@@ -40,6 +40,7 @@ cp -r $METADATA_PATH $TMPDIR/metadata.json
 
 cd $TMPDIR
 
+ls
 # LOAD MODULES
 module load python/3.7.2
 module load cuda/10.1
