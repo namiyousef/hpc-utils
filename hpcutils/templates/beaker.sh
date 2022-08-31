@@ -21,7 +21,7 @@
 #$ -S /bin/bash
 #$ -j y
 #$ -N {job_name}
-#$ -wd /home/yousnami
+#$ -wd /home/yousnami/Scratch
 
 #The code you want to run now goes here.
 export EMAIL_PASSWORD={email_password}
