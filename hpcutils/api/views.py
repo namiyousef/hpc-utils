@@ -105,7 +105,9 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
                 project_name=project_name,
                 job_name=job_name,
                 script_template_name=script_template_name,
-                **body
+                **body,
+                email_recipients=email_recipients,
+                email_password=email_password
             )
     except Exception as e:
         return f"Failed to read {myriad_template_path}. Full logs: {e}", 400
@@ -124,9 +126,7 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         with open(job_script_template_path, 'r') as f:
             job_script = f.read()
             job_script = job_script.format(
-                **env_vars,
-                email_recipients=email_recipients,
-                email_password=email_password
+                **env_vars
             )
 
             job_script_function = f'run_job_script () {{' \
