@@ -208,7 +208,7 @@ components:
     EnvVars:
       name: env_vars
       in: query
-      required: true
+      required: false
       description: environment variables
       schema:
         $ref: '#/components/schemas/EnvVars'
