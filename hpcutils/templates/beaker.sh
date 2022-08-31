@@ -24,10 +24,14 @@
 #$ -wd /home/yousnami
 
 #The code you want to run now goes here.
-
+export EMAIL_RECIPIENTS={email_recipients}
 export PROJECT_NAME={project_name}
 export PROJECT_PATH=job_metadata/$PROJECT_NAME
 export JOB_PATH=$PROJECT_PATH/$JOB_ID
+export METADATA_PATH=$JOB_PATH/metadata.json
+
+hpcutils-email "start" "Job ${JOB_ID} started" $METADATA_PATH
+
 export SCRIPT_TEMPLATE_NAME={script_template_name}
 # COPY NECESSARY FILES
 cp -r $JOB_PATH/$SCRIPT_TEMPLATE_NAME $TMPDIR/$SCRIPT_TEMPLATE_NAME
@@ -43,12 +47,15 @@ module load cuda/10.1
 source venv/bin/activate
 
 source $SCRIPT_TEMPLATE_NAME
+
 run_job_script
 
 # DELETE FILES COPIED FROM JOB
 rm -r venv
 rm $SCRIPT_TEMPLATE_NAME
 rm -r data
+
+hpcutils-email "end" "Job ${JOB_ID} complete"
 
 
 tar -zcvf $HOME/Scratch/$PROJECT_NAME.$JOB_ID.tar.gz $TMPDIR

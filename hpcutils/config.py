@@ -30,3 +30,6 @@ CLUSTER_RESOURCE_MAPPING = {
 
 PORT = os.environ.get('PORT', 8080)
 CLUSTER = os.environ.get('CLUSTER', None)
+
+EMAIL = os.environ.get('EMAIL', 'nlp.fyp1800@gmail.com')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', None)

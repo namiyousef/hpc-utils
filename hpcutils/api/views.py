@@ -5,6 +5,7 @@ import subprocess
 import datetime
 import logging
 import shutil
+from flask import request
 
 def health_check():
     return 'OK'
@@ -74,6 +75,9 @@ def create_cluster_config(cluster, project_name, github_username, github_reposit
         return f"Project {project_name} created.", 200
 
 def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env_vars):
+
+    email_recipients = body.pop('email_recipients')
+
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
     project_path = os.path.join(cluster_storage_dir, 'job_metadata', project_name)
     if not os.path.exists(project_path):
@@ -119,7 +123,8 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
         with open(job_script_template_path, 'r') as f:
             job_script = f.read()
             job_script = job_script.format(
-                **env_vars
+                **env_vars,
+                email_recipients=email_recipients
             )
 
             job_script_function = f'run_job_script () {{' \
@@ -227,3 +232,7 @@ def create_venv(cluster, project_name):
 
 def delete_venv(cluster, project_name):
     return 'Not implemented yet', 400
+
+
+def get_ip():
+    return request.remote_addr, 200
