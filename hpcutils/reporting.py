@@ -66,7 +66,7 @@ def create_email_content():
 
 def job_start_report(subject, recipients, metadata_path):
     with open(metadata_path, 'r') as f:
-        json_str = json.loads(f)
+        json_str = json.dumps(json.load(f))
     mail_content = json_str
     send_email(
         receiver=recipients,
