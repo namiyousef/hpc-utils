@@ -75,7 +75,7 @@ def create_cluster_config(cluster, project_name, github_username, github_reposit
         return f"Project {project_name} created.", 200
 
 def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env_vars):
-
+    email_password = body.pop('email_password')
     email_recipients = body.pop('email_recipients')
 
     cluster_storage_dir = CLUSTER_RESOURCE_MAPPING[cluster]['cluster_storage_dir']
@@ -124,7 +124,8 @@ def run_gpu_job(body, cluster, project_name, job_name, script_template_name, env
             job_script = f.read()
             job_script = job_script.format(
                 **env_vars,
-                email_recipients=email_recipients
+                email_recipients=email_recipients,
+                email_password=email_password
             )
 
             job_script_function = f'run_job_script () {{' \

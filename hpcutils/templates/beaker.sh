@@ -24,6 +24,7 @@
 #$ -wd /home/yousnami
 
 #The code you want to run now goes here.
+export EMAIL_PASSWORD={email_password}
 export EMAIL_RECIPIENTS={email_recipients}
 export PROJECT_NAME={project_name}
 export PROJECT_PATH=job_metadata/$PROJECT_NAME

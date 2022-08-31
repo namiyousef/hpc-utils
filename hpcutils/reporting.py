@@ -88,9 +88,9 @@ def main():
     report_type = sys.argv[1]
     subject = sys.argv[2]
     recipients = sys.argv[3]
-    path = sys.argv[4]
 
     if report_type == 'start':
+        path = sys.argv[4]
         job_start_report(subject, recipients, path)
     elif report_type == 'end':
         job_completion_report(subject, recipients)
