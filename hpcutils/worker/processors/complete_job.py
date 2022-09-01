@@ -1,6 +1,7 @@
 import os
 import tarfile
 import json
+import shutil
 from hpcutils.config import CLUSTER_RESOURCE_MAPPING
 
 # TODO see if you can add logging here!
@@ -64,9 +65,9 @@ class CompleteJobProcessor:
 
         # TODO might not have the same file structure!!! (e.g if in beaker)
 
-        extracted_path = CLUSTER_RESOURCE_MAPPING[self.cluster]['extract_file_path'].format(job_id=self.job_id)
+        self.extracted_path = CLUSTER_RESOURCE_MAPPING[self.cluster]['extract_file_path'].format(job_id=self.job_id)
         job_output_src = os.path.join(
-            self.project_path, extracted_path
+            self.project_path, self.extracted_path
         )
 
         # TODO need to also think about caching data (defining a storage for it)
@@ -107,8 +108,7 @@ class CompleteJobProcessor:
     def postprocess(self):
         # send an email
         # delete the metadata.json
-        os.rmdir(os.path.join(self.project_path, 'tmpdir/job'))
-        os.rmdir(os.path.join(self.project_path, 'tmpdir'))
+        shutil.rmtree(os.path.join(self.project_path, self.extracted_path))
         os.remove(os.path.join(self.project_path, f'{self.job_id}.json'))
 
         # cleans up the file
