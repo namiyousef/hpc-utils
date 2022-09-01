@@ -1,12 +1,15 @@
 import os
 import tarfile
 import json
+from hpcutils.config import CLUSTER_RESOURCE_MAPPING
 
 # TODO see if you can add logging here!
 class CompleteJobProcessor:
+
     # can you generalise this for non-myriad jobs? ATM only for myriad!!!!
     def __init__(self, message_data):
 
+        self.cluster = os.environ.get('CLUSTER')
         self.project_path = message_data['project_path']
         self.filename = message_data['item']
         self.project_name = self.filename.split('.')[0]
@@ -60,8 +63,10 @@ class CompleteJobProcessor:
                 raise Exception(f'Failed to extract tarfile: {tar_path}. Reason: {e}')
 
         # TODO might not have the same file structure!!! (e.g if in beaker)
+
+        extracted_path = CLUSTER_RESOURCE_MAPPING[self.cluster]['extract_file_path'].format(job_id=self.job_id)
         job_output_src = os.path.join(
-            self.project_path, f'tmpdir/job/{self.job_id}.undefined'
+            self.project_path, extracted_path
         )
 
         # TODO need to also think about caching data (defining a storage for it)
