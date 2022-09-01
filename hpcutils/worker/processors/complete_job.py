@@ -65,7 +65,11 @@ class CompleteJobProcessor:
 
         # TODO might not have the same file structure!!! (e.g if in beaker)
 
-        self.extracted_path = CLUSTER_RESOURCE_MAPPING[self.cluster]['extract_file_path'].format(job_id=self.job_id)
+        self.extract_path_rootdir = CLUSTER_RESOURCE_MAPPING[self.cluster]['extract_file_rootdir']
+        self.extract_file = CLUSTER_RESOURCE_MAPPING[self.cluster]['extract_file_pattern'].format(job_id=self.job_id)
+
+
+        self.extracted_path = os.path.join(self.extract_path_rootdir, self.extract_file)
         job_output_src = os.path.join(
             self.project_path, self.extracted_path
         )
@@ -108,7 +112,7 @@ class CompleteJobProcessor:
     def postprocess(self):
         # send an email
         # delete the metadata.json
-        shutil.rmtree(os.path.join(self.project_path, self.extracted_path))
+        shutil.rmtree(os.path.join(self.project_path, self.extract_path_rootdir))
         os.remove(os.path.join(self.project_path, f'{self.job_id}.json'))
 
         # cleans up the file

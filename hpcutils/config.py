@@ -19,14 +19,16 @@ CLUSTER_RESOURCE_MAPPING = {
         'output_file_pattern': r"(?<!^)(\.o\d+)$",
         'error_file_pattern': r"(?<!^)(\.e\d+)$",
         'data_file_pattern': r"(?<!^)(\.tar\.gz)$",
-        'extract_file_path': 'tmpdir/job/{job_id}.undefined'
+        'extract_file_pattern': '{job_id}.undefined',
+        'extract_path_rootdir': 'tmpdir/job/'
     },
     'beaker': {
         'cluster_storage_dir': 'Scratch',
         'output_file_pattern': r"(?<!^)(\.o\d+)$",
         'error_file_pattern': r"(?<!^)(\.e\d+)$",
         'data_file_pattern': r"(?<!^)(\.tar\.gz)$",
-        'extract_file_path': 'tmp/{job_id}.1.gpu.q'
+        'extract_file_pattern': '{job_id}.1.gpu.q',
+        'extract_file_rootdir': 'tmp'
     }
 }
 
