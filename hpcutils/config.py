@@ -18,13 +18,13 @@ CLUSTER_RESOURCE_MAPPING = {
         },
         'output_file_pattern': r"(?<!^)(\.o\d+)$",
         'error_file_pattern': r"(?<!^)(\.e\d+)$",
-        'data_file_pattern': r"(?<!^)(\.gz\.tar)$"
+        'data_file_pattern': r"(?<!^)(\.tar\.gz)$"
     },
     'beaker': {
         'cluster_storage_dir': 'Scratch',
         'output_file_pattern': r"(?<!^)(\.o\d+)$",
         'error_file_pattern': r"(?<!^)(\.e\d+)$",
-        'data_file_pattern': r"(?<!^)(\.gz\.tar)$"
+        'data_file_pattern': r"(?<!^)(\.tar\.gz)$"
     }
 }
 
