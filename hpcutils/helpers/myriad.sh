@@ -32,5 +32,10 @@ generate_script_file () {
   echo $var
 }
 
+list_job_output_dir () {
+  local project="${1}"
+  local job_id="${2}"
+  ls Scratch/job_metadata/$project/$job_id/job_output
+}
 
 echo "Successfully loaded Myriad Helpers"
