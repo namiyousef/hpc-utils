@@ -8,11 +8,11 @@
 #   NOTE hash dollar is a scheduler directive not a comment.
 
 # These are flags you must include - Two memory and one runtime.
-# Runtime is either seconds or hours:min:sec
+# Runtime is either seconds or hours:min:sec ,gpu_type=(gtx1080ti|titanxp|titanx|rtx2080ti)
 
 #$ -m be
-#$ -l tmem=32G
-#$ -l gpu=true,gpu_type=(gtx1080ti|titanxp|titanx|rtx2080ti)
+#$ -l tmem=16G
+#$ -l gpu=true
 # #$ -l h_vmem=32G
 #$ -l h_rt={walltime}
 
