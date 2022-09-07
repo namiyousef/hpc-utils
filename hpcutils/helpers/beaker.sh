@@ -14,12 +14,12 @@ install_torch_gpu () {
 }
 
 install_library_ssh () {
-  pip install --no-cache-dir git+ssh://git@github.com/$1/$2.git
+  pip install --no-cache-dir git+ssh://git@github.com/$1/$2.git@$3
 }
 
 prepare_virtualenv () {
   install_torch_gpu $1
-  install_library_ssh $2 $3
+  install_library_ssh $2 $3 $4
 }
 
 echo "Successfully loaded Beaker Helpers"
